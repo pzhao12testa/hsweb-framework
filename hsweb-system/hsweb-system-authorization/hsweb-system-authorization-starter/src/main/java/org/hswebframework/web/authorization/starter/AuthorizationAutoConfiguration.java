@@ -21,17 +21,13 @@ package org.hswebframework.web.authorization.starter;
 import org.hswebframework.web.authorization.AuthenticationInitializeService;
 import org.hswebframework.web.authorization.AuthenticationManager;
 import org.hswebframework.web.authorization.simple.DefaultAuthorizationAutoConfiguration;
-import org.hswebframework.web.authorization.token.UserTokenManager;
-import org.hswebframework.web.service.authorization.UserService;
 import org.hswebframework.web.service.authorization.simple.SimpleAuthenticationManager;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @author zhouhao
@@ -40,7 +36,6 @@ import org.springframework.context.annotation.Import;
 @ComponentScan({"org.hswebframework.web.service.authorization.simple"
         , "org.hswebframework.web.controller.authorization"})
 @AutoConfigureBefore(DefaultAuthorizationAutoConfiguration.class)
-@Import(BasicAuthorizationConfiguration.class)
 public class AuthorizationAutoConfiguration {
 
     @Bean
@@ -50,9 +45,8 @@ public class AuthorizationAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "hsweb.authorize", name = "sync", havingValue = "true")
-    public AutoSyncPermission autoSyncPermission() {
+    @ConditionalOnProperty(prefix = "hsweb.authorize",name = "sync",havingValue = "true")
+    public AutoSyncPermission autoSyncPermission(){
         return new AutoSyncPermission();
     }
-
 }

@@ -13,7 +13,6 @@ import java.util.Set;
  * @author zhouhao
  */
 public class SimplePersonnelAuthorization implements PersonnelAuthorization {
-    private static final long serialVersionUID = 1_0;
     private Personnel             personnel;
     private Set<TreeNode<String>> districtIds;
     private Set<TreeNode<String>> orgIds;

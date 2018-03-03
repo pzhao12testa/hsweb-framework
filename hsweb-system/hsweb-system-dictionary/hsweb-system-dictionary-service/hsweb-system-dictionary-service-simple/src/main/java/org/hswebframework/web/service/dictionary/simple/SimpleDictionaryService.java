@@ -20,12 +20,9 @@ import org.hswebframework.web.dao.dictionary.DictionaryDao;
 import org.hswebframework.web.entity.dictionary.DictionaryEntity;
 import org.hswebframework.web.entity.dictionary.DictionaryItemEntity;
 import org.hswebframework.web.id.IDGenerator;
-import org.hswebframework.web.service.EnableCacheAllEvictGenericEntityService;
-import org.hswebframework.web.service.EnableCacheGenericEntityService;
 import org.hswebframework.web.service.GenericEntityService;
 import org.hswebframework.web.service.dictionary.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,8 +31,7 @@ import org.springframework.stereotype.Service;
  * @author hsweb-generator-online
  */
 @Service("dictionaryService")
-@CacheConfig(cacheNames = "dictionary")
-public class SimpleDictionaryService extends EnableCacheAllEvictGenericEntityService<DictionaryEntity, String>
+public class SimpleDictionaryService extends GenericEntityService<DictionaryEntity, String>
         implements DictionaryService {
     @Autowired
     private DictionaryDao dictionaryDao;
@@ -49,6 +45,5 @@ public class SimpleDictionaryService extends EnableCacheAllEvictGenericEntitySer
     public DictionaryDao getDao() {
         return dictionaryDao;
     }
-
 
 }

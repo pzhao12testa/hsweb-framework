@@ -3,7 +3,6 @@ package org.hswebframework.web.organizational.authorization.simple;
 import com.alibaba.fastjson.JSON;
 import org.hswebframework.web.authorization.access.DataAccessConfig;
 import org.hswebframework.web.authorization.simple.builder.DataAccessConfigConvert;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +10,8 @@ import java.util.List;
 import static org.hswebframework.web.organizational.authorization.access.DataAccessType.*;
 
 /**
+ * TODO 完成注释
+ *
  * @author zhouhao
  */
 public class ScopeDataAccessConfigConvert implements DataAccessConfigConvert {
@@ -25,9 +26,6 @@ public class ScopeDataAccessConfigConvert implements DataAccessConfigConvert {
 
     @Override
     public DataAccessConfig convert(String type, String action, String config) {
-        if (StringUtils.isEmpty(config)) {
-            config = "{}";
-        }
         SimpleScopeDataAccessConfig accessConfig = JSON.parseObject(config, SimpleScopeDataAccessConfig.class);
         accessConfig.setAction(action);
         accessConfig.setType(type);

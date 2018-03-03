@@ -16,7 +16,6 @@ import org.hswebframework.web.organizational.authorization.Position;
 @AllArgsConstructor
 @Builder
 public class SimplePosition implements Position {
-    private static final long serialVersionUID = 1_0;
     private String id;
 
     private String name;

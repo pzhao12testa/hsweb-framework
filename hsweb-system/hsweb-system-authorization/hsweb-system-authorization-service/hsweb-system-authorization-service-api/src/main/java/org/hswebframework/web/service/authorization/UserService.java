@@ -29,8 +29,6 @@ public interface UserService extends
 
     UserEntity selectByUsername(String username);
 
-    UserEntity selectByUserNameAndPassword(String plainUsername,String plainPassword);
-
     String encodePassword(String password, String salt);
 
     void updatePassword(String userId, String oldPassword, String newPassword);

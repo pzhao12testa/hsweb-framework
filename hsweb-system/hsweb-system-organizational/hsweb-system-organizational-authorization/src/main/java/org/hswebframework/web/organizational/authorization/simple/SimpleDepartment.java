@@ -16,7 +16,6 @@ import org.hswebframework.web.organizational.authorization.Organization;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimpleDepartment implements Department {
-    private static final long serialVersionUID = 1_0;
     private String id;
     private String name;
     private String code;

@@ -4,8 +4,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * TODO 完成注释
+ *
  * @author zhouhao
- * @since 3.0
+ * @since
  */
 @Configuration
 @ComponentScan({"org.hswebframework.web.service.template.simple"

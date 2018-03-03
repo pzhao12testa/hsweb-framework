@@ -27,11 +27,5 @@
             <artifactId>hsweb-datasource-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.hswebframework.web</groupId>
-            <artifactId>hsweb-datasource-jta</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 </project>

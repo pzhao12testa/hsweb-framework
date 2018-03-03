@@ -36,8 +36,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.List;
 
 @RestControllerAdvice
@@ -81,7 +79,7 @@ public class RestControllerExceptionTranslator {
     @ExceptionHandler(UnAuthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
-    ResponseMessage handleException(UnAuthorizedException exception, HttpServletResponse response) {
+    ResponseMessage handleException(UnAuthorizedException exception) {
         return ResponseMessage.error(401, exception.getMessage()).result(exception.getState());
     }
 
@@ -118,15 +116,7 @@ public class RestControllerExceptionTranslator {
     @ResponseBody
     ResponseMessage handleException(RuntimeException exception) {
         logger.error(exception.getMessage(), exception);
-        return ResponseMessage.error(500, exception.getMessage());
-    }
-
-    @ExceptionHandler(SQLException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    ResponseMessage handleException(SQLException exception) {
-        logger.error(exception.getMessage(), exception);
-        return ResponseMessage.error(500, "服务器内部错误");
+        return ResponseMessage.error(400, exception.getMessage());
     }
 
 

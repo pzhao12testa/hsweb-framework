@@ -12,8 +12,6 @@ import org.hswebframework.web.ThreadLocalUtils;
 import org.hswebframework.web.controller.message.ResponseMessage;
 import org.hswebframework.utils.StringUtils;
 import org.hswebframework.web.convert.CustomMessageConverter;
-import org.hswebframework.web.dict.DictSupportApi;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -39,8 +37,6 @@ import java.util.Set;
 public class FastJsonGenericHttpMessageConverter extends AbstractGenericHttpMessageConverter<Object> implements Ordered {
 
     public final static Charset UTF8 = Charset.forName("UTF-8");
-    @Autowired(required = false)
-    private DictSupportApi dictSupportApi;
 
     private Charset charset = UTF8;
 
@@ -115,15 +111,11 @@ public class FastJsonGenericHttpMessageConverter extends AbstractGenericHttpMess
                 }
             }
         }
-        Object object = JSON.parseObject(bytes, 0, bytes.length, charset.newDecoder(), type);
-        if (dictSupportApi != null) {
-            object = dictSupportApi.unwrap(object);
-        }
-        return object;
+        return JSON.parseObject(bytes, 0, bytes.length, charset.newDecoder(), type);
     }
 
     @Override
-    public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException {
+    public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         InputStream in = inputMessage.getBody();
         byte[] buf = new byte[1024];
@@ -144,19 +136,12 @@ public class FastJsonGenericHttpMessageConverter extends AbstractGenericHttpMess
         if (obj instanceof String) {
             return (String) obj;
         }
-
         String text;
         String callback = ThreadLocalUtils.getAndRemove("jsonp-callback");
         if (obj instanceof ResponseMessage) {
             ResponseMessage message = (ResponseMessage) obj;
-            if (dictSupportApi != null) {
-                message.setResult(dictSupportApi.wrap(message.getResult()));
-            }
-            text = JSON.toJSONString(obj, FastJsonHttpMessageConverter.parseFilter(message), features);
+            text = JSON.toJSONString(obj, parseFilter(message), features);
         } else {
-            if (dictSupportApi != null) {
-                obj = dictSupportApi.wrap(obj);
-            }
             text = JSON.toJSONString(obj, features);
         }
         if (!StringUtils.isNullOrEmpty(callback)) {
@@ -176,5 +161,27 @@ public class FastJsonGenericHttpMessageConverter extends AbstractGenericHttpMess
         out.flush();
     }
 
+    protected static SerializeFilter[] parseFilter(ResponseMessage<?> responseMessage) {
+        List<SerializeFilter> filters = new ArrayList<>();
+        if (responseMessage.getIncludes() != null) {
+            for (Map.Entry<Class<?>, Set<String>> classSetEntry : responseMessage.getIncludes().entrySet()) {
+                SimplePropertyPreFilter filter = new SimplePropertyPreFilter(classSetEntry.getKey());
+                filter.getIncludes().addAll(classSetEntry.getValue());
+                filters.add(filter);
+            }
+        }
+        if (responseMessage.getExcludes() != null) {
+            for (Map.Entry<Class<?>, Set<String>> classSetEntry : responseMessage.getExcludes().entrySet()) {
+                SimplePropertyPreFilter filter = new SimplePropertyPreFilter(classSetEntry.getKey());
+                filter.getExcludes().addAll(classSetEntry.getValue());
+                filters.add(filter);
+            }
+        }
+        PropertyFilter responseMessageFilter = (object, name, value) ->
+                !(object instanceof ResponseMessage) || value != null;
+        filters.add(responseMessageFilter);
+
+        return filters.toArray(new SerializeFilter[filters.size()]);
+    }
 
 }

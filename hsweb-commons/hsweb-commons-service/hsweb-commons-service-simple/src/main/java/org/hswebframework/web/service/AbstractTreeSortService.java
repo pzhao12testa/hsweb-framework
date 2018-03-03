@@ -92,8 +92,7 @@ public abstract class AbstractTreeSortService<E extends TreeSortSupportEntity<PK
         applyPath(entity);
         List<E> childrenList = new ArrayList<>();
         TreeSupportEntity.expandTree2List(entity, childrenList, getIDGenerator());
-//        super.insert(entity);
-//        childrenList.remove(entity);
+        super.insert(entity);
         childrenList.forEach(this::saveOrUpdateForSingle);
         return entity.getId();
     }
@@ -116,8 +115,7 @@ public abstract class AbstractTreeSortService<E extends TreeSortSupportEntity<PK
         assertNotNull(entity);
         List<E> childrenList = new ArrayList<>();
         TreeSupportEntity.expandTree2List(entity, childrenList, getIDGenerator());
-//        this.saveOrUpdateForSingle(entity);
-//        childrenList.remove(entity);
+        this.saveOrUpdateForSingle(entity);
         childrenList.forEach(this::saveOrUpdateForSingle);
         return childrenList.size() + 1;
     }

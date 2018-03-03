@@ -1,6 +1,5 @@
 package org.hswebframework.web.organizational.authorization;
 
-import org.hswebframework.web.organizational.authorization.relation.RelationTargetSupplierAutoRegister;
 import org.hswebframework.web.organizational.authorization.simple.*;
 import org.hswebframework.web.organizational.authorization.simple.handler.*;
 import org.springframework.beans.BeansException;
@@ -78,11 +77,6 @@ public class OrganizationalAuthorizationAutoConfiguration implements BeanPostPro
             PersonnelAuthorizationHolder.addSupplier(((PersonnelAuthorizationSupplier) bean));
         }
         return bean;
-    }
-
-    @Bean
-    public RelationTargetSupplierAutoRegister relationTargetSupplierAutoRegister() {
-        return new RelationTargetSupplierAutoRegister();
     }
 
     @Configuration
