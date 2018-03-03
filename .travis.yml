@@ -1,3 +1,8 @@
+addons:
+  sonarcloud:
+    organization: hsweb
+    token:
+      secure: fba01e9fb57104fd0cfbed380e8c90301e35ff09
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 cache:
@@ -9,7 +14,7 @@ language: java
 script:
 - touch /tmp/NOW
 - echo GIBSTUDYSTART $(date)
-- mvn test
+- mvn test sonar:sonar
 - echo GIBSTUDYEND $(date)
 - cd $TRAVIS_BUILD_DIR
 - echo TESTNUM $(find . -name TEST-*.xml -newer /tmp/NOW | wc -l)
